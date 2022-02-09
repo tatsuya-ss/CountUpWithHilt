@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupButton() {
         binding.countUpButton.setOnClickListener {
             binding.countUpText.text = countUp.countUp().toString()
-            println(countUp.countUp().toString())
         }
     }
 
@@ -44,7 +43,7 @@ class CountUp @Inject constructor() {
     private var count = 0
 
     fun countUp(): Int {
-        count += 1
+        count ++
         return count
     }
 }
