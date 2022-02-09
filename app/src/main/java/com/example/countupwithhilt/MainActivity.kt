@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.countupwithhilt.databinding.ActivityMainBinding
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,6 +53,7 @@ class CountUpImpl @Inject constructor(): CountUp {
     }
 }
 
+// HiltModuleで提供
 @InstallIn(SingletonComponent::class)
 @Module
 object CountUpModule {
@@ -59,6 +61,13 @@ object CountUpModule {
         return CountUpImpl()
     }
 }
+
+// Bindで提供のパターン
+//@InstallIn(SingletonComponent::class)
+//@Module
+//abstract class CountUpBind {
+//    @Binds abstract fun bindCountUp(impl: CountUpImpl): CountUp
+//}
 
 @HiltAndroidApp
 class CountUpApplication: Application()
