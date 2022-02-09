@@ -39,10 +39,14 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-class CountUp @Inject constructor() {
+interface CountUp {
+    fun countUp(): Int
+}
+
+class CountUpImpl @Inject constructor(): CountUp {
     private var count = 0
 
-    fun countUp(): Int {
+    override fun countUp(): Int {
         count ++
         return count
     }
@@ -52,7 +56,7 @@ class CountUp @Inject constructor() {
 @Module
 object CountUpModule {
     @Provides fun provideCountUp(): CountUp {
-        return CountUp()
+        return CountUpImpl()
     }
 }
 
