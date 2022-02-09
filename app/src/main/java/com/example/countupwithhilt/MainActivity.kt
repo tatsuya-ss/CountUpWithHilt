@@ -69,6 +69,9 @@ class CountUpImpl @Inject constructor(): CountUp {
 @InstallIn(SingletonComponent::class)
 @Module
 object CountUpModule {
+    @Provides fun provideUseCase(countUp: CountUp): UseCase {
+        return UseCaseImpl(countUp = countUp)
+    }
     @Provides fun provideCountUp(): CountUp {
         return CountUpImpl()
     }
@@ -76,11 +79,11 @@ object CountUpModule {
 
 // Bindで提供のパターン。インターフェースを使用する実装に使える
 // 今回で言うと、constructorにインターフェースを設定したUseCaseに使う
-@InstallIn(SingletonComponent::class)
-@Module
-abstract class UseCaseBind {
-    @Binds abstract fun bindUseCase(impl: UseCaseImpl): UseCase
-}
+//@InstallIn(SingletonComponent::class)
+//@Module
+//abstract class UseCaseBind {
+//    @Binds abstract fun bindUseCase(impl: UseCaseImpl): UseCase
+//}
 
 @HiltAndroidApp
 class CountUpApplication: Application()
