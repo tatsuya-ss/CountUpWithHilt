@@ -12,12 +12,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    @Inject lateinit var countUp: CountUp
+    @Inject lateinit var useCase: UseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +35,21 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupButton() {
         binding.countUpButton.setOnClickListener {
-            binding.countUpText.text = countUp.countUp().toString()
+            binding.countUpText.text = useCase.countUp().toString()
         }
     }
 
+}
+
+interface UseCase {
+    fun countUp(): Int
+}
+
+class UseCaseImpl @Inject constructor(private val countUp: CountUp): UseCase {
+
+    override fun countUp(): Int {
+        return countUp.countUp()
+    }
 }
 
 interface CountUp {
@@ -62,12 +74,13 @@ object CountUpModule {
     }
 }
 
-// Bindで提供のパターン
-//@InstallIn(SingletonComponent::class)
-//@Module
-//abstract class CountUpBind {
-//    @Binds abstract fun bindCountUp(impl: CountUpImpl): CountUp
-//}
+// Bindで提供のパターン。インターフェースを使用する実装に使える
+// 今回で言うと、constructorにインターフェースを設定したUseCaseに使う
+@InstallIn(SingletonComponent::class)
+@Module
+abstract class UseCaseBind {
+    @Binds abstract fun bindUseCase(impl: UseCaseImpl): UseCase
+}
 
 @HiltAndroidApp
 class CountUpApplication: Application()
